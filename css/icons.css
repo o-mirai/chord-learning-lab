@@ -1,0 +1,85 @@
+/* ==========================================
+   SVGアイコンのスタイル
+   ========================================== */
+
+.icon {
+  display: inline-block;
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke-width: 2;
+  stroke: currentColor;
+  fill: none;
+  vertical-align: middle;
+}
+
+/* サイズバリエーション */
+.icon-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-md {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.icon-lg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.icon-xl {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* メニューカード用の大きいアイコン */
+.menu-icon .icon {
+  width: 3rem;
+  height: 3rem;
+  stroke-width: 1.5;
+}
+
+/* ヘッダーナビゲーション用 */
+.nav-icon .icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* アイコンのアニメーション */
+.icon {
+  transition: transform var(--transition-base);
+}
+
+.menu-card:hover .icon {
+  transform: scale(1.1);
+}
+
+/* アイコンの色 */
+.icon-learn {
+  color: #3B82F6; /* ブライトブルー - 濃いブルーでコントラスト */
+}
+
+.icon-quiz-notes {
+  color: #A78BFA; /* パステルパープル - 明るいパープルでアクセント */
+}
+
+.icon-quiz-name {
+  color: #EC4899; /* ピンク - パンチを効かせる */
+}
+
+.icon-primary {
+  color: var(--color-primary);
+}
+
+.icon-success {
+  color: var(--color-success);
+}
+
+.icon-warning {
+  color: var(--color-warning);
+}
+
+.icon-secondary {
+  color: var(--color-secondary);
+}
