@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chord Learning Lab</title>
+  <meta name="description" content="音楽のコード（和音）を学習できるWebアプリ。インタラクティブなクイズで楽しく学べます。">
+  
+  <!-- ファビコン -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <meta name="theme-color" content="#3B82F6">
+  
+  <link rel="stylesheet" href="css/design-system.css" />
+  <link rel="stylesheet" href="css/header.css" />
+  <link rel="stylesheet" href="css/icons.css" />
+  <link rel="stylesheet" href="css/common.css" />
+  <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+  <!-- SVGアイコンスプライトを読み込み -->
+  <div style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <!-- 本アイコン（ヘッダー学習用） -->
+      <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </symbol>
+
+      <!-- 音波アイコン（ヘッダー名前クイズ用） -->
+      <symbol id="icon-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+      </symbol>
+
+      <!-- 鍵盤アイコン（ヘッダー構成音クイズ用） -->
+      <symbol id="icon-keyboard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+        <line x1="6" y1="6" x2="6" y2="18"></line>
+        <line x1="10" y1="6" x2="10" y2="18"></line>
+        <line x1="14" y1="6" x2="14" y2="18"></line>
+        <line x1="18" y1="6" x2="18" y2="18"></line>
+        <line x1="8" y1="6" x2="8" y2="12"></line>
+        <line x1="12" y1="6" x2="12" y2="12"></line>
+        <line x1="16" y1="6" x2="16" y2="12"></line>
+      </symbol>
+
+      <!-- チェックマーク（正解用） -->
+      <symbol id="icon-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </symbol>
+
+      <!-- バツマーク（不正解用） -->
+      <symbol id="icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </symbol>
+
+      <!-- スピーカーアイコン（音量用） -->
+      <symbol id="icon-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </symbol>
+
+      <!-- 時計アイコン（タイマー用） -->
+      <symbol id="icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polyline points="12 6 12 12 16 14"></polyline>
+      </symbol>
+
+      <!-- リセットアイコン（回転矢印） -->
+      <symbol id="icon-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"></polyline>
+        <polyline points="1 20 1 14 7 14"></polyline>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+      </symbol>
+    </svg>
+  </div>
+  
+  <!-- 共通ヘッダー -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="index.html" class="app-logo">
+        <span class="logo-icon">♪</span>
+        <span class="logo-text">Chord Learning Lab</span>
+      </a>
+      
+      <nav class="header-nav">
+        <a href="learn.html" class="nav-link">
+          <span class="nav-icon">
+            <svg class="icon"><use href="#icon-book"></use></svg>
+          </span>
+          <span class="nav-text">コード検索</span>
+        </a>
+        <a href="quiz-notes.html" class="nav-link">
+          <span class="nav-icon">
+            <svg class="icon"><use href="#icon-keyboard"></use></svg>
+          </span>
+          <span class="nav-text">構成音選択</span>
+        </a>
+        <a href="quiz-name.html" class="nav-link">
+          <span class="nav-icon">
+            <svg class="icon"><use href="#icon-music"></use></svg>
+          </span>
+          <span class="nav-text">ネーム推測</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="app-container-wrapper">
+    <div class="app-container">
+      <h1>Chord Learning Lab</h1>
+      <p class="app-description">音楽のコード（和音）を楽しく学習しましょう！</p>
+
+      <div class="menu">
+        <a href="learn.html" class="menu-card learn">
+          <span class="menu-icon">
+            <svg class="icon icon-learn"><use href="#icon-book"></use></svg>
+          </span>
+          <span class="menu-title">コード検索モード</span>
+          <span class="menu-desc">各コードの構成音を確認</span>
+        </a>
+        <a href="quiz-notes.html" class="menu-card quiz-notes">
+          <span class="menu-icon">
+            <svg class="icon icon-quiz-notes"><use href="#icon-keyboard"></use></svg>
+          </span>
+          <span class="menu-title">構成音選択クイズ</span>
+          <span class="menu-desc">コードの構成音を選ぼう（MIDI対応）</span>
+          <span id="home-midi-status" class="home-midi-status"></span>
+        </a>
+        <a href="quiz-name.html" class="menu-card quiz-name">
+          <span class="menu-icon">
+            <svg class="icon icon-quiz-name"><use href="#icon-music"></use></svg>
+          </span>
+          <span class="menu-title">コードネーム推測クイズ</span>
+          <span class="menu-desc">音を聴いてコード名を当てよう</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 現在のページのナビリンクをアクティブにする
+    document.addEventListener('DOMContentLoaded', () => {
+      const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPage) {
+          link.classList.add('active');
+        }
+      });
+
+      // MIDI接続状態をチェック
+      checkMidiStatus();
+    });
+
+    // MIDI接続状態をチェックして表示
+    async function checkMidiStatus() {
+      const statusElement = document.getElementById('home-midi-status');
+      
+      if (!statusElement) return;
+
+      // Web MIDI APIがサポートされているかチェック
+      if (!navigator.requestMIDIAccess) {
+        statusElement.textContent = '';
+        return;
+      }
+
+      try {
+        const midiAccess = await navigator.requestMIDIAccess();
+        const hasDevices = midiAccess.inputs.size > 0;
+        
+        if (hasDevices) {
+          statusElement.textContent = 'キーボード接続済み';
+          statusElement.className = 'home-midi-status connected';
+        } else {
+          statusElement.textContent = 'キーボード接続可能';
+          statusElement.className = 'home-midi-status disconnected';
+        }
+
+        // デバイスの接続・切断を監視
+        midiAccess.onstatechange = () => {
+          const nowHasDevices = midiAccess.inputs.size > 0;
+          if (nowHasDevices) {
+            statusElement.textContent = 'キーボード接続済み';
+            statusElement.className = 'home-midi-status connected';
+          } else {
+            statusElement.textContent = 'キーボード接続可能';
+            statusElement.className = 'home-midi-status disconnected';
+          }
+        };
+      } catch (error) {
+        // MIDI アクセスが拒否された場合
+        statusElement.textContent = '';
+      }
+    }
+  </script>
+</body>
+
+</html>

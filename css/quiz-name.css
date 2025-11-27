@@ -1,0 +1,456 @@
+/* コード名当てクイズ */
+
+.main {
+  flex: 1;
+  padding: var(--space-xl);
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* 進捗バー */
+.progress-bar-container {
+  margin: var(--space-sm) auto;
+  max-width: 700px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.progress-text {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 1.0625rem;
+}
+
+.timer-display {
+  font-weight: 600;
+  color: var(--color-primary);
+  font-size: 1.0625rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 20px;
+  background: var(--color-background);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-success) 0%, var(--color-success-light) 100%);
+  transition: width var(--transition-slow);
+  width: 0%;
+}
+
+/* 選択エリア */
+.choices {
+  margin-bottom: var(--space-sm);
+}
+
+/* セレクターコンテナ */
+.selectors-container {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  min-width: 180px;
+}
+
+.selector-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.selector-select {
+  padding: var(--space-sm) var(--space-md);
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-md) center;
+  padding-right: 2.5rem;
+}
+
+.selector-select:hover:not(:disabled) {
+  border-color: var(--color-primary);
+}
+
+.selector-select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.selector-select:disabled {
+  background-color: var(--color-background);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.root-select {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.root-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.1);
+}
+
+.type-select {
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+.type-select:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(var(--color-secondary-rgb), 0.1);
+}
+
+/* 結果表示 */
+#result {
+  font-weight: 600;
+  font-size: 1rem;
+  margin: var(--space-sm) 0;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-md);
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.4;
+}
+
+#result.correct {
+  background: var(--color-success-bg);
+  color: var(--color-success-dark);
+  border: 2px solid var(--color-success);
+}
+
+#result.incorrect {
+  background: var(--color-error-bg);
+  color: var(--color-error-dark);
+  border: 2px solid var(--color-error);
+}
+
+/* ナビゲーション */
+.nav {
+  margin-top: var(--space-sm);
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav button {
+  padding: var(--space-sm) var(--space-lg);
+  font-size: 1rem;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-base);
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+.nav button:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.nav button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.nav button:disabled {
+  background: var(--color-text-disabled);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+#replay {
+  background: var(--color-warning);
+}
+
+#replay:hover:not(:disabled) {
+  background: var(--color-warning-dark);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .main {
+    padding: var(--space-md);
+  }
+
+  .selectors-container {
+    gap: var(--space-md);
+  }
+
+  .selector-group {
+    min-width: 140px;
+  }
+
+  .selector-select {
+    padding: var(--space-sm);
+    font-size: 0.875rem;
+    padding-right: 2rem;
+  }
+
+  #result {
+    font-size: 0.9375rem;
+    padding: var(--space-xs) var(--space-sm);
+    min-height: 40px;
+  }
+
+  .nav button {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+  }
+}
+
+/* スマホ横向け対応 */
+@media (max-width: 768px) and (max-height: 500px) and (orientation: landscape) {
+  .main {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  h1 {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-xs);
+  }
+  
+  .progress-bar-container {
+    margin: var(--space-xs) auto;
+  }
+  
+  .progress-bar {
+    height: 14px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.8125rem;
+  }
+  
+  .volume-control {
+    margin: var(--space-xs) 0;
+    padding: var(--space-xs);
+    gap: var(--space-xs);
+  }
+  
+  .selectors-container {
+    gap: var(--space-xs);
+    margin: var(--space-xs) 0;
+  }
+  
+  .selector-group {
+    min-width: 100px;
+  }
+  
+  .selector-label {
+    font-size: 0.75rem;
+  }
+  
+  .selector-select {
+    padding: var(--space-xs);
+    font-size: 0.75rem;
+  }
+  
+  #result {
+    font-size: 0.8125rem;
+    padding: var(--space-xs);
+    min-height: 32px;
+    margin: var(--space-xs) 0;
+  }
+  
+  .nav {
+    margin-top: var(--space-xs);
+    gap: var(--space-xs);
+  }
+  
+  .nav button {
+    padding: var(--space-xs);
+    font-size: 0.75rem;
+  }
+}
+
+/* 高さに応じた段階的な調整 */
+@media (max-height: 700px) {
+  .main {
+    padding: var(--space-md);
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .progress-bar {
+    height: 20px;
+  }
+  
+  .selectors-container {
+    gap: var(--space-md);
+  }
+}
+
+@media (max-height: 600px) {
+  .main {
+    padding: var(--space-sm);
+  }
+  
+  h1 {
+    font-size: 1.375rem;
+  }
+  
+  .progress-bar {
+    height: 18px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.9375rem;
+  }
+  
+  .volume-control {
+    padding: var(--space-sm);
+  }
+  
+  .selectors-container {
+    gap: var(--space-sm);
+  }
+  
+  #result {
+    font-size: 1rem;
+    padding: var(--space-sm);
+    min-height: 50px;
+  }
+}
+
+@media (max-height: 500px) {
+  .main {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  h1 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+  }
+  
+  .progress-bar-container {
+    margin: var(--space-xs) auto;
+  }
+  
+  .progress-bar {
+    height: 16px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.875rem;
+  }
+  
+  .volume-control {
+    margin: var(--space-xs) 0;
+    padding: var(--space-xs);
+  }
+  
+  .selectors-container {
+    gap: var(--space-xs);
+    margin: var(--space-xs) 0;
+  }
+  
+  .selector-group {
+    min-width: 120px;
+  }
+  
+  .selector-select {
+    padding: var(--space-xs);
+    font-size: 0.8125rem;
+  }
+  
+  #result {
+    font-size: 0.875rem;
+    padding: var(--space-xs);
+    min-height: 40px;
+    margin: var(--space-xs) 0;
+  }
+  
+  .nav {
+    margin-top: var(--space-xs);
+    gap: var(--space-xs);
+  }
+  
+  .nav button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-height: 400px) {
+  h1 {
+    font-size: 1rem;
+  }
+  
+  .progress-bar {
+    height: 12px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.75rem;
+  }
+  
+  .volume-control {
+    display: none;
+  }
+  
+  .selector-select {
+    font-size: 0.75rem;
+  }
+  
+  #result {
+    font-size: 0.75rem;
+    min-height: 28px;
+  }
+  
+  .nav button {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .selectors-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .selector-group {
+    width: 100%;
+    max-width: 250px;
+  }
+}

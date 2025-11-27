@@ -1,0 +1,635 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 
+               'Yu Gothic Medium', 'Meiryo', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  transform-origin: top center;
+}
+
+/* タイトルと音量調整のレイアウト */
+.title-with-volume {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+.title-with-volume h1 {
+  margin: 0;
+}
+
+.title-with-volume .volume-control {
+  position: absolute;
+  right: 0;
+  margin: 0;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.title-with-volume .volume-control label {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.title-with-volume .volume-control input[type="range"] {
+  width: 100px;
+  margin: 0;
+}
+
+.title-with-volume .volume-control .volume-display {
+  font-size: 0.875rem;
+  min-width: 36px;
+}
+
+.main {
+  text-align: center;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: var(--space-lg) var(--space-xl);
+}
+
+/* 音量スライダーのつまみ部分 */
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  background: var(--color-primary-dark);
+  transform: scale(1.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--color-primary);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: all var(--transition-base);
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  background: var(--color-primary-dark);
+  transform: scale(1.2);
+}
+
+input[type="range"] {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: var(--radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.volume-display {
+  min-width: 50px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+#keyboard {
+  position: relative;
+  width: 100%;
+  max-width: 700px;
+  height: clamp(250px, 30vh, 400px);
+  margin: var(--space-sm) auto;
+  background: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.white-key {
+  position: absolute;
+  top: 0;
+  width: calc(100% / 7);
+  height: clamp(250px, 30vh, 400px);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  padding-bottom: 10px;
+  box-sizing: border-box;
+  user-select: none;
+  transition: all var(--transition-fast);
+}
+
+.black-key {
+  position: absolute;
+  top: 0;
+  width: calc(100% / 14);
+  height: clamp(150px, 18vh, 240px);
+  background: var(--color-text-primary);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-surface);
+  padding-bottom: 5px;
+  transform: translateX(-50%);
+  user-select: none;
+  transition: all var(--transition-fast);
+  opacity: 1;
+}
+
+.white-key.selected {
+  background: var(--color-primary-light);
+  animation: keyPulse 0.3s ease;
+}
+
+.black-key.selected {
+  background: var(--color-primary-light);
+  color: var(--color-text-primary);
+  animation: keyPulseBlack 0.3s ease;
+  z-index: 3;
+}
+
+.white-key.active {
+  background: var(--color-primary-light);
+  animation: keyPulse 0.3s ease;
+}
+
+.black-key.active {
+  background: var(--color-primary-light);
+  color: var(--color-text-primary);
+  animation: keyPulseBlack 0.3s ease;
+  z-index: 3;
+}
+
+@keyframes correctPulse {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes shake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  25% {
+    transform: translateX(-5px);
+  }
+
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes keyPulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes keyPulseBlack {
+  0% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    transform: translateX(-50%) scale(1.05);
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.correct-animation {
+  animation: correctPulse 0.5s ease;
+}
+
+.incorrect-animation {
+  animation: shake 0.5s ease;
+}
+
+/*画面サイズへの配慮を強化 */
+@media (max-width: 768px) {
+  .main {
+    padding: var(--space-md);
+  }
+  
+  .title-with-volume {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-sm);
+    position: static;
+  }
+  
+  .title-with-volume h1 {
+    flex: 1;
+    text-align: center;
+  }
+  
+  .title-with-volume .volume-control {
+    position: static;
+  }
+  
+  .title-with-volume .volume-control input[type="range"] {
+    width: 80px;
+  }
+
+  #keyboard {
+    height: 200px;
+    max-width: 100%;
+  }
+
+  .white-key {
+    height: 200px;
+    font-size: 12px;
+  }
+
+  .black-key {
+    height: 120px;
+    font-size: 10px;
+  }
+}
+
+/* さらに小さい画面（スマートフォン）への対応 */
+@media (max-width: 480px) {
+  .main {
+    padding: var(--space-sm);
+  }
+  
+  .title-with-volume h1 {
+    font-size: 1.375rem;
+  }
+  
+  .title-with-volume .volume-control {
+    padding: var(--space-xs);
+  }
+  
+  .title-with-volume .volume-control input[type="range"] {
+    width: 80px;
+  }
+  
+  .title-with-volume .volume-control .volume-display {
+    font-size: 0.75rem;
+    min-width: 32px;
+  }
+
+  #keyboard {
+    height: 150px;
+  }
+
+  .white-key {
+    height: 150px;
+    font-size: 10px;
+    padding-bottom: 5px;
+  }
+
+  .black-key {
+    height: 90px;
+    font-size: 8px;
+    padding-bottom: 3px;
+  }
+
+  /* 小さい画面でのボタンサイズ調整 */
+  input[type="range"]::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* アクセシビリティ向上 - 高コントラストモード対応 */
+@media (prefers-contrast: high) {
+  .white-key {
+    border: 2px solid #000;
+  }
+
+  .black-key {
+    border: 2px solid #fff;
+  }
+
+  .white-key.selected,
+  .white-key.active {
+    background: #64B5F6;
+    border: 3px solid #000;
+  }
+
+  .black-key.selected,
+  .black-key.active {
+    background: #64B5F6;
+    color: #000;
+    border: 3px solid #000;
+  }
+}
+
+/* ==========================================
+   縦幅レスポンシブ - 包括的な対応
+   ========================================== */
+
+/* 高さに応じて鍵盤サイズを可変（全デバイス対応） */
+@media (max-height: 800px) {
+  #keyboard {
+    height: clamp(220px, 38vh, 300px);
+    margin: var(--space-md) auto;
+  }
+  
+  .white-key {
+    height: clamp(220px, 38vh, 300px);
+  }
+  
+  .black-key {
+    height: clamp(135px, 23vh, 180px);
+  }
+}
+
+@media (max-height: 700px) {
+  #keyboard {
+    height: clamp(180px, 33vh, 240px);
+    margin: var(--space-sm) auto;
+  }
+  
+  .white-key {
+    height: clamp(180px, 33vh, 240px);
+    font-size: 12px;
+  }
+  
+  .black-key {
+    height: clamp(110px, 20vh, 145px);
+    font-size: 10px;
+  }
+  
+  .main {
+    padding: var(--space-md);
+  }
+  
+  /* 進捗バーを小さく */
+  .progress-bar-container {
+    margin: var(--space-sm) auto;
+  }
+  
+  .progress-bar {
+    height: 20px;
+  }
+}
+
+@media (max-height: 600px) {
+  #keyboard {
+    height: clamp(140px, 30vh, 200px);
+  }
+  
+  .white-key {
+    height: clamp(140px, 30vh, 200px);
+    font-size: 11px;
+    padding-bottom: 5px;
+  }
+  
+  .black-key {
+    height: clamp(85px, 18vh, 120px);
+    font-size: 9px;
+    padding-bottom: 3px;
+  }
+  
+  .main {
+    padding: var(--space-sm);
+  }
+  
+  /* 音量調整をコンパクトに */
+  
+  /* 進捗バーを更に小さく */
+  .progress-bar {
+    height: 18px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.9375rem;
+  }
+}
+
+/* コンパクトモード - 画面高さが非常に低い場合 */
+@media (max-height: 500px) {
+  #keyboard {
+    height: clamp(120px, 27vh, 160px);
+    margin: var(--space-xs) auto;
+  }
+  
+  .white-key {
+    height: clamp(120px, 27vh, 160px);
+    font-size: 10px;
+    padding-bottom: 4px;
+  }
+  
+  .black-key {
+    height: clamp(72px, 16vh, 96px);
+    font-size: 8px;
+    padding-bottom: 2px;
+  }
+  
+  .main {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  h1 {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xs);
+  }
+  
+  .title-with-volume {
+    margin-bottom: var(--space-sm);
+  }
+  
+  .title-with-volume h1 {
+    font-size: 1.125rem;
+  }
+  
+  .title-with-volume .volume-control {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .title-with-volume .volume-control label {
+    font-size: 0.875rem;
+  }
+  
+  .title-with-volume .volume-control input[type="range"] {
+    width: 80px;
+  }
+  
+  .title-with-volume .volume-control .volume-display {
+    font-size: 0.75rem;
+  }
+  
+  /* 重要度の低い要素を非表示 */
+  .learning-tips {
+    display: none;
+  }
+  
+  .selection-info {
+    display: none;
+  }
+  
+  /* 進捗バーを最小化 */
+  .progress-bar-container {
+    margin: var(--space-xs) auto;
+  }
+  
+  .progress-bar {
+    height: 16px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.875rem;
+  }
+  
+  /* ボタンとナビゲーションを小さく */
+  .nav {
+    margin-top: var(--space-xs);
+    gap: var(--space-xs);
+  }
+  
+  .nav button {
+    padding: var(--space-xs) var(--space-sm);
+    font-size: 0.8125rem;
+  }
+  
+  /* 結果表示を小さく */
+  #result {
+    font-size: 0.875rem;
+    padding: var(--space-xs);
+    min-height: 36px;
+  }
+}
+
+/* 極端に低い画面 - 最小限の表示 */
+@media (max-height: 400px) {
+  #keyboard {
+    height: clamp(80px, 22vh, 100px);
+  }
+  
+  .white-key {
+    height: clamp(80px, 22vh, 100px);
+    font-size: 8px;
+    padding-bottom: 3px;
+  }
+  
+  .black-key {
+    height: clamp(50px, 13vh, 60px);
+    font-size: 7px;
+    padding-bottom: 2px;
+  }
+  
+  h1 {
+    font-size: 1rem;
+    margin-bottom: var(--space-xs);
+  }
+  
+  .title-with-volume {
+    flex-direction: row;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-xs);
+  }
+  
+  .title-with-volume h1 {
+    font-size: 0.875rem;
+  }
+  
+  .title-with-volume .volume-control {
+    padding: 0.125rem 0.25rem;
+  }
+  
+  .title-with-volume .volume-control label {
+    font-size: 0.75rem;
+  }
+  
+  .title-with-volume .volume-control input[type="range"] {
+    width: 60px;
+  }
+  
+  .title-with-volume .volume-control .volume-display {
+    font-size: 0.625rem;
+    min-width: 28px;
+  }
+  
+  .progress-bar-container {
+    margin: 0 auto var(--space-xs);
+  }
+  
+  .progress-bar {
+    height: 12px;
+  }
+  
+  .progress-text,
+  .timer-display {
+    font-size: 0.75rem;
+  }
+}
+
+/* スマホ横向け - 追加の最適化 */
+@media (max-width: 768px) and (max-height: 500px) and (orientation: landscape) {
+  /* 横向き特有の調整 */
+  .main {
+    padding: var(--space-xs) var(--space-sm);
+  }
+  
+  .chord-info-container {
+    flex-direction: row;
+    gap: var(--space-xs);
+  }
+  
+  #chord-name,
+  #chord-notes {
+    font-size: 0.8125rem;
+    padding: var(--space-xs);
+  }
+}
+
+/* タブレット横向け */
+@media (min-width: 769px) and (max-height: 600px) and (orientation: landscape) {
+  .learning-tips {
+    display: none;
+  }
+  
+  .main {
+    padding: var(--space-md);
+  }
+}
